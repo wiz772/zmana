@@ -23,13 +23,17 @@ class Service(win32serviceutil.ServiceFramework):
         self.is_alive = False
 
     def SvcDoRun(self):
-        servicemanager.LogInfoMsg("Zmana: SvcDoRun entered")
-
+        self.ReportServiceStatus(win32service.SERVICE_RUNNING)
+        servicemanager.LogMsg(
+            servicemanager.EVENTLOG_INFORMATION_TYPE,
+            servicemanager.PYS_SERVICE_STARTED,
+            (self._svc_name_, '')
+        )
         try:
             self.main()
         except Exception as e:
             servicemanager.LogErrorMsg(f"Zmana error: {e}")
-            raise
+            self.SvcStop()
 
     def main(self):
         # Main service logic goes here
