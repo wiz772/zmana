@@ -1,0 +1,3 @@
+def get_focused_window():
+    ...    
+
